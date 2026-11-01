@@ -3213,6 +3213,7 @@ if __name__ == "__main__":
     from flask import Flask
     import threading
     import os
+    import asyncio
 
     web_app = Flask(__name__)
 
@@ -3225,4 +3226,11 @@ if __name__ == "__main__":
         web_app.run(host='0.0.0.0', port=port)
 
     threading.Thread(target=run_web, daemon=True).start()
+    
+    # FIX FOR RENDER - create event loop
+    try:
+        asyncio.get_event_loop()
+    except RuntimeError:
+        asyncio.set_event_loop(asyncio.new_event_loop())
+    
     main()
